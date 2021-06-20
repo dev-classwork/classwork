@@ -1,0 +1,76 @@
+.no-hover-effect:hover {
+    background-color: transparent !important;
+    color: steelblue !important;
+}
+.readme-div {
+    background-color: whitesmoke !important;
+    display: flex !important;
+    flex-direction: column !important;
+    margin-bottom: 10px;
+    padding: 20px 20px;
+}
+.readme-div h1{
+    margin-bottom: 0px;
+}
+.readme-div p{
+    text-align: justify;
+    margin-bottom: 0px;
+    margin-bottom: 10px;
+}
+.readme-div img{
+    max-width: 100%;
+    margin: 2px;
+}
+.readme-div ul{
+    list-style-type: none;
+    list-style: none;
+}
+.readme-div ul li p{
+    background-color: steelblue;
+    font-weight: 700;
+    color: white;
+    padding: 5px;
+    margin-bottom: 0px;
+}
+.readme-div ul li{
+    font-weight: 700;
+    padding: 5px;
+}
+.readme-div li{
+    list-style-type: none;
+    list-style: none;
+}
+.readme-div pre {
+    background-color: rgb(219, 219, 219);
+    border-radius: 5px;
+    padding: 5px;
+    margin-bottom: 5px;
+}
+.readme-div code {
+    color: black;
+}
+.readme-div a {
+    text-decoration: none;
+}
+.readme-div a[target="_blank"]{
+    margin: 0px 5px;
+    text-decoration: none;
+}
+.checkbox {
+    display: flex;
+    align-items: center;
+    margin-left: 5px;
+    padding: 0px !important;
+}
+.checkbox img {
+    width: 25px;
+    height: 25px;
+    padding: 0px !important;
+    margin-right: 5px;
+}
+.checkbox:first-of-type {
+    margin-top: 5px;
+}
+.checkbox:last-of-type {
+    margin-bottom: 0px !important;
+}

@@ -1,0 +1,364 @@
+.div-header {
+    height: 3vh;
+    background-color: steelblue;
+}
+.div-header-container {
+    display: flex;
+    align-items: center;
+    height: 10vh;
+    background-color: rgb(98, 167, 224);
+}
+.second-div-header-container {
+    padding: 0px 20px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    height: 10vh;
+    background-color: rgb(115, 185, 243);
+}
+.div-header-container img {
+    margin-left: 12px;
+    height: 36px;
+    width: 250px;
+}
+.header-title {
+    font-size: 45px;
+    color: white;
+    text-transform: capitalize;
+}
+.expansive-lateral {
+    flex-direction: row;
+    top: 0;
+    position: absolute;
+    display: flex;
+    height: 100vh;
+    z-index: 5;
+}
+.expansive-lateral * {
+    pointer-events: none;
+}
+.expansive-lateral:hover * {
+    pointer-events: all;
+}
+.expansive-box {
+    background-color: rgb(77, 151, 211);
+    height: 100vh;
+    width: 56px;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.div-item-expansive-list {
+    margin: 0px 0px 0px 0px;
+    display: flex;
+    flex-direction: column;
+    list-style-type: none;
+}
+.div-item-expansive-list div {
+    height: 56px;
+    display: flex;
+    width: fit-content;
+    flex-direction: row;
+    color: currentColor;
+    background-color: rgb(132, 190, 238);
+}
+.div-item-expansive-list div:hover {
+    cursor: pointer;
+}
+.div-item-expansive-list div #image {
+    width: 56px;
+    height: 56px;
+    background: white;
+}
+.div-item-expansive-list div div#icon {
+    width: 56px;
+    height: 56px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.div-item-expansive-list div div#icon svg{
+    width: 30px;
+    height: 30px;
+}
+.div-item-expansive-list div div#content {
+    background-color: whitesmoke;
+    width: 0px;
+    height: 100%;
+    color: transparent;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: background-color 1s;
+}
+.div-item-expansive-list div:hover div#content {
+    border-right: 2px solid;
+    width: auto;
+    max-width: 30vw;
+    color: currentColor;
+    padding: 5px 15px;
+    animation: haederItemExpansive .5s;
+}
+.div-item-expansive-list div div#content h2{
+    background-color: whitesmoke;
+    white-space: nowrap;
+}
+.div-item-expansive-list div div#content h3{
+    background-color: whitesmoke;
+    white-space: nowrap;
+}
+.div-item-expansive-list div div#content h4{
+    background-color: whitesmoke;
+    white-space: nowrap;
+}
+.div-item-expansive-list-button {
+    height: 56px;
+    display: flex;
+    width: fit-content;
+    flex-direction: row;
+    color: currentColor;
+    background-color: rgb(132, 190, 238);
+}
+.div-item-expansive-list-button div#icon {
+    width: 56px;
+    height: 56px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.div-item-expansive-list-button div#icon svg{
+    width: 30px;
+    height: 30px;
+}
+.div-item-expansive-list-button div#content {
+    background-color: whitesmoke;
+    width: 0px;
+    height: 100%;
+    color: transparent;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: background-color 1s;
+}
+.div-item-expansive-list-button:hover div#content {
+    border-right: 2px solid;
+    width: auto;
+    max-width: 30vw;
+    color: currentColor;
+    padding: 5px 15px;
+    animation: haederItemExpansive .5s;
+}
+.div-item-expansive-list-button div#content h2{
+    background-color: whitesmoke;
+    white-space: nowrap;
+}
+.red {
+    background-color: rgb(235, 168, 168);
+}
+.red:hover {
+    cursor: pointer;
+    background-color: rgb(228, 141, 141);
+}
+.red:hover div#content{
+    color: rgb(228, 141, 141) !important;
+    border-color: rgb(228, 141, 141) !important;
+}
+.expanded-background {
+    background-color: rgba(0, 0, 0, 0.25);
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    z-index: 4;
+    animation: fade-in 1s;
+    transition: background-color 1s;
+}
+.expanded-background-disable {
+    width: 0vw;
+    height: 0vh;
+    animation: fade-out-headerBg linear .2s;
+}
+
+@media screen and (max-width: 767px) and (orientation: portrait){
+    .div-header {
+        height: 0vh;
+        background-color: steelblue;
+    }
+    .div-header-container {
+        display: flex;
+        align-items: center;
+        height: 8vh;
+        background-color: rgb(98, 167, 224);
+    }
+    .second-div-header-container {
+        padding: 0px 20px;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        height: 8vh;
+        background-color: rgb(115, 185, 243);
+    }
+    .div-header-container img {
+        margin-left: 12px;
+        height: 36px;
+        width: 250px;
+    }
+    .header-title {
+        font-size: 35px;
+        color: white;
+        text-transform: capitalize;
+    }
+    .expansive-lateral {
+        flex-direction: row;
+        top: 0;
+        position: absolute;
+        display: flex;
+        height: 56px;
+        width: 100vw;
+        z-index: 5;
+    }
+    .expansive-lateral * {
+        pointer-events: none;
+    }
+    .expansive-lateral:hover * {
+        pointer-events: all;
+    }
+    .expansive-box {
+        background-color: rgb(77, 151, 211);
+        height: 56px;
+        width: 100vw;
+        color: white;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+    .div-item-expansive-list {
+        margin: 0px 0px 0px 0px;
+        display: flex;
+        flex-direction: row;
+        list-style-type: none;
+    }
+    .div-item-expansive-list div {
+        height: 56px;
+        display: flex;
+        width: fit-content;
+        flex-direction: row;
+        color: currentColor;
+        background-color: rgb(132, 190, 238);
+    }
+    .div-item-expansive-list div:hover {
+        cursor: pointer;
+    }
+    .div-item-expansive-list div #image {
+        width: 56px;
+        height: 56px;
+        background: white;
+    }
+    .div-item-expansive-list div div#icon {
+        width: 56px;
+        height: 56px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .div-item-expansive-list div div#icon svg{
+        width: 30px;
+        height: 30px;
+    }
+    .div-item-expansive-list div div#content {
+        background-color: whitesmoke;
+        width: 0px;
+        height: 0px;
+        color: transparent;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        transition: background-color 1s;
+    }
+    .div-item-expansive-list div:hover div#content {
+        border-right: 2px solid;
+        width: auto;
+        max-width: 30vw;
+        color: currentColor;
+        padding: 5px 15px;
+        animation: haederItemExpansive .5s;
+    }
+    .div-item-expansive-list div div#content h2{
+        background-color: whitesmoke;
+        white-space: nowrap;
+    }
+    .div-item-expansive-list div div#content h3{
+        background-color: whitesmoke;
+        white-space: nowrap;
+    }
+    .div-item-expansive-list div div#content h4{
+        background-color: whitesmoke;
+        white-space: nowrap;
+    }
+    .div-item-expansive-list-button {
+        height: 56px;
+        display: flex;
+        width: fit-content;
+        flex-direction: row;
+        color: currentColor;
+        background-color: rgb(132, 190, 238);
+    }
+    .div-item-expansive-list-button div#icon {
+        width: 56px;
+        height: 56px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .div-item-expansive-list-button div#icon svg{
+        width: 30px;
+        height: 30px;
+    }
+    .div-item-expansive-list-button div#content {
+        background-color: whitesmoke;
+        width: 0px;
+        height: 100%;
+        color: transparent;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        transition: background-color 1s;
+    }
+    .div-item-expansive-list-button:hover div#content {
+        border-right: 2px solid;
+        width: auto;
+        max-width: 30vw;
+        color: currentColor;
+        padding: 5px 15px;
+        animation: haederItemExpansive .5s;
+    }
+    .div-item-expansive-list-button div#content h2{
+        background-color: whitesmoke;
+        white-space: nowrap;
+    }
+    .red {
+        background-color: rgb(235, 168, 168);
+    }
+    .red:hover {
+        cursor: pointer;
+        background-color: rgb(228, 141, 141);
+    }
+    .red:hover div#content{
+        color: rgb(228, 141, 141) !important;
+        border-color: rgb(228, 141, 141) !important;
+    }
+    .expanded-background {
+        background-color: rgba(0, 0, 0, 0.25);
+        position: absolute;
+        width: 100vw;
+        height: 100vh;
+        z-index: 4;
+        animation: fade-in 1s;
+        transition: background-color 1s;
+    }
+    .expanded-background-disable {
+        width: 0vw;
+        height: 0vh;
+        animation: fade-out-headerBg linear .2s;
+    }
+}
