@@ -1,21 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, ChangeEvent } from 'react';
 import { TeamsAnalyticsComponent, TeamsAnalyticsDataItem, ConfirmBoxContent, ClassInfoItem } from '../../interfaces/global';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Brush, ReferenceLine, Label } from 'recharts';
 import axios from 'axios';
 import moment from 'moment';
 import colorConvert from 'color-convert';
+import DataTable from 'react-data-table-component';
 
 import Tooltip1 from './tooltip';
+import Tooltip2 from './tooltipBalance';
 import DynamicColorElement from './Profile/dynamicColorElements';
 
 import { useHistory, useParams } from 'react-router-dom';
 import { FaSync } from 'react-icons/fa';
 import api from '../../services/api';
 import ConfirmBox from '../../components/confirmBox';
+import Icons from '../../components/icons';
 
 const TeamsAnalytics = (props: TeamsAnalyticsComponent) => {
     const { key } = useParams<{ key: string }>();
     const history = useHistory();
+    const [page, setPage] = useState(1);
     const [teams, setTeams] = useState<TeamsAnalyticsDataItem[]>([]);
     const [lastUpdate, setLastUpdate] = useState(localStorage.getItem(`classwork@${key}#lastUpdate`)? localStorage.getItem(`classwork@${key}#lastUpdate`):"Nunca");
     const [canActive, setCanActive] = useState(true);
@@ -48,6 +52,11 @@ const TeamsAnalytics = (props: TeamsAnalyticsComponent) => {
     
     const haveOldEffort = localStorage.getItem(`classwork@${key}#effort`) !== null && localStorage.getItem(`classwork@${key}#effort`) !== undefined;
     
+
+    var itemPerPage = 10;
+    var pageMax = Math.ceil(teams.length/itemPerPage);
+    var pageMin = 1;
+
     useEffect(() => {
         async function startLoad(){
             setCanActive(false);
@@ -73,12 +82,11 @@ const TeamsAnalytics = (props: TeamsAnalyticsComponent) => {
                     },
                     balance: 1,
                     cc: 0,
+                    changes: 0,
                     li: 0,
                     mt: 0,
                     value: 0,
                 };
-
-                console.log(_teams[i].balance, "1");
 
                 let name = _teams[i].repos.split('/')[0];
                 let repos = _teams[i].repos.split('/')[1];
@@ -175,13 +183,27 @@ const TeamsAnalytics = (props: TeamsAnalyticsComponent) => {
                                     _teamsWithValues[o].cc += _teamsWithValues[o].actions.commits[c].complexity_cyclomatic;
                                     _teamsWithValues[o].li += _teamsWithValues[o].actions.commits[c].lines;
                                     _teamsWithValues[o].mt += _teamsWithValues[o].actions.commits[c].methods;
+                                    _teamsWithValues[o].changes += _teamsWithValues[o].actions.commits[c].status.total;
                                 }
                                
-                                _teamsWithValues[o].value = (_teamsWithValues[o].cc + _teamsWithValues[o].mt * 0.8 + _teamsWithValues[o].li * 0.2)/2;
+                                
                             }
 
-                            let perfectRank = (_teamsWithValues[o].value * 100)/_teamsWithValues[o].actions.rank.length;
-                            
+                            let qtdBots = 0;
+                            for(let r in _teamsWithValues[o].actions.rank){
+                                if(_teamsWithValues[o].actions.rank[r].name.includes("[bot]") || _teamsWithValues[o].actions.rank[r].name.includes("Não processado")){
+                                    qtdBots++;
+                                };
+                            }
+
+                            _teamsWithValues[o].value = ((
+                                    ((_teamsWithValues[o].changes) * 0.5) +
+                                    ((_teamsWithValues[o].cc) * 4.5)
+                                )/5);
+                            let qtd = _teamsWithValues[o].actions.rank.length - qtdBots;
+
+                            let perfectRank = _teamsWithValues[o].value/qtd;
+                            let totalScore = 0;
                             let scores: number[] = [];
 
                             for(let r in _teamsWithValues[o].actions.rank){
@@ -189,8 +211,11 @@ const TeamsAnalytics = (props: TeamsAnalyticsComponent) => {
 
                                 let score = 0;
 
-                                if((item.complexity_cyclomatic !== 0 || item.methods !== 0 || item.lines !== 0) && !item.name.includes("Não processado")){
-                                    score = (((item.complexity_cyclomatic + item.methods * 0.8 + item.lines * 0.2)/2) * 100);
+                                if(!item.name.includes("[bot]") && !item.name.includes("Não processado")){
+                                    score = (
+                                        (item.additions + item.deletions) * 0.5 + 
+                                        (item.complexity_cyclomatic * 4.5)/5
+                                    );
                                 }
 
                                 let maxScore = perfectRank;
@@ -198,28 +223,14 @@ const TeamsAnalytics = (props: TeamsAnalyticsComponent) => {
                                 if(score >= maxScore){
                                     score = maxScore;
                                 }
+                                
 
+                                totalScore += score;
                                 scores[Number(r)] = score;
                             }
 
-                            let totalScore = 0;
-
-                            let qtdBots = 0;
                             
-                            for(let r in _teamsWithValues[o].actions.rank){
-                                if(_teamsWithValues[o].actions.rank[r].name.includes("[bot]") || _teamsWithValues[o].actions.rank[r].name.includes("Não processado")){
-                                    qtdBots++;
-                                }
-                            }
-
-                            let qtd = _teamsWithValues[o].actions.rank.length - qtdBots;
-
-                            for(let s in scores){
-                                totalScore += scores[s];
-                            }
-
                             let lastScore = Number(((totalScore/qtd)/perfectRank).toFixed(2));
-
                             _teamsWithValues[o].balance = lastScore * 100;
                         }
 
@@ -464,6 +475,16 @@ const TeamsAnalytics = (props: TeamsAnalyticsComponent) => {
         }
     }
 
+    function handleChangePage(e: ChangeEvent<HTMLInputElement>){
+        setPage(Number(e.target.value));
+    }
+
+    function goToPage(num: number, func: string){
+        if((num <= pageMax && func === "next") || (num >= pageMin && func === "back")){
+            setPage(num);
+        }
+    }
+
     return(<div className="fade-in">
         {classInfo && <ConfirmBox
             primaryColor={classInfo.color} 
@@ -546,29 +567,81 @@ const TeamsAnalytics = (props: TeamsAnalyticsComponent) => {
                     barSize={20}
                 >
                     <XAxis dataKey="name" scale="point" padding={{ left: 10, right: 10 }}/>
-                    <YAxis dataKey="balance" yAxisId="left" orientation="left" stroke={props.secundaryColor} tickMargin={10} unit="%"/>
-                    <YAxis dataKey="value" yAxisId="right" orientation="right" stroke={props.primaryColor} tickMargin={10}/> 
+                    <YAxis dataKey="value" yAxisId="left" orientation="left" stroke={props.primaryColor} tickMargin={10}/> 
                     <Tooltip content={Tooltip1}/>
                     <CartesianGrid strokeDasharray="3 3" />
-                    <Bar dataKey="balance" yAxisId="left" fill={props.secundaryColor} unit="%"/>
-                    <Bar dataKey="value" yAxisId="right"  fill={props.primaryColor}/>
-                    <ReferenceLine yAxisId="left" label={
-                        <Label value="60%" position="insideBottomLeft"/>
-                    } y={60} stroke={'black'}/>
-                    <Brush dataKey="name" 
-                        height={50} 
-                        stroke={props.primaryColor}  
-                        travellerWidth={10}
-                        startIndex={0}
-                        endIndex={teams.length >= 10? 9:teams.length - 1}
-                    />
+                    <Bar dataKey="value" yAxisId="left"  fill={props.primaryColor}/>
                 </BarChart>:<div className="load-teams-screen">
                     { loadStage !== "Necessário atualizar os dados!"? 
                     <FaSync size={30} className="rotate" color={props.primaryColor}/>:null }
                     <h1>{loadStage}</h1>
                 </div>}
             </div>
-            {canActive && loadStage !== "Necessário atualizar os dados!" && <>
+            { teams && teams?.length > 0 && canActive && <div className="teams-analytics-grafic">
+                <BarChart
+                    className="fade-in"
+                    width={1100}
+                    height={270}
+                    data={teams}
+                    margin={{
+                        top: 20, right: 30, left: 20, bottom: 5,
+                    }}
+                    barSize={20}
+                >
+                    <XAxis dataKey="name" scale="point" padding={{ left: 10, right: 10 }}/>
+                    <YAxis dataKey="balance" yAxisId="left" orientation="left" stroke={props.secundaryColor} tickMargin={10} unit="%"/>
+                    <Tooltip content={Tooltip2}/>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <Bar dataKey="balance" yAxisId="left" fill={props.secundaryColor} unit="%"/>
+                    <ReferenceLine yAxisId="left" label={
+                        <Label value="60%" position="insideBottomLeft"/>
+                    } y={60} stroke={'black'}/>
+                </BarChart>
+            </div> }
+            {teams && teams?.length > 0 && canActive &&  <>
+            <h1 className="commmits-chart-title">Registro Geral</h1>
+            <h2 className="commmits-chart-subtitle">Veja todas as informações</h2>
+            <div className="table-page-control-div">
+                <button onClick={() => {goToPage(pageMin, "back")}} style={{color: (page > pageMin)? "rgb(70, 130, 180)":"rgb(148, 182, 211)"}}><Icons name="double-back" size={25} color="white"/></button>
+                <button onClick={() => {goToPage(page - 1, "back")}} style={{color: (page > pageMin)? "rgb(70, 130, 180)":"rgb(148, 182, 211)"}}><Icons name="back" size={25} color="white"/></button>
+                    
+                <input min={pageMin} max={pageMax} type="number" value={page} onChange={handleChangePage}></input>
+            
+                <button onClick={() => {goToPage(page + 1, "next")}} style={{color: (page < pageMax)? "rgb(70, 130, 180)":"rgb(148, 182, 211)"}}><Icons name="next" size={25} color="white"/></button>
+                <button onClick={() => {goToPage(pageMax, "next")}} style={{color: (page < pageMax)? "rgb(70, 130, 180)":"rgb(148, 182, 211)"}}><Icons name="double-next" size={25} color="white"/></button>
+            </div>
+            <table className="table-commits">
+                <thead>
+                    <tr>
+                        <th>Nº</th>
+                        <th>Nome</th>
+                        <th>Repositório</th>
+                        <th>Qtd. Alterações</th>
+                        <th>Qtd. Métodos</th>
+                        <th>C. Ciclomatica</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {
+                    teams.map(function(item: TeamsAnalyticsDataItem, index: number){
+                        if((index+1) > (itemPerPage*(page-1)) && (index+1) <= (itemPerPage*(page))){
+                            return(<tr key={index} className="table-commits-tr">
+                                <td className="table-commits-tr-td table-commits-tr-td-text table-id">{index + 1}</td>
+                                <td className="table-commits-tr-td table-commits-tr-td-text table-alt">{item.name.split("|")[0]}</td>
+                                <td className="table-commits-tr-td table-commits-tr-td-text table-alt">{item.repos}</td>
+                                <td className="table-commits-tr-td table-commits-tr-td-text table-alt">{item.changes}</td>
+                                <td className="table-commits-tr-td table-commits-tr-td-text table-alt">{item.mt}</td>
+                                <td className="table-commits-tr-td table-commits-tr-td-text table-alt">{item.cc}</td>
+                                <td className="table-commits-tr-td table-commits-tr-td-text table-alt">{item.commitInWeek? "Ativo":"Inativo"}</td>
+                            </tr>);
+                        }else{
+                            return null;
+                        }
+                    })
+                }
+                </tbody>
+            </table>
             <h1 className="commmits-chart-title" 
                 style={{ color: props.primaryColor }}
             >Equipes inativas</h1>
@@ -595,6 +668,7 @@ const TeamsAnalytics = (props: TeamsAnalyticsComponent) => {
                     })}
                 </ul>
             </div>}
+            
             {(canActive && (!teams || !haveInactiveTeam)) && <div className="load-teams-screen"
                 style={{
                     height: 50

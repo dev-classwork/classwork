@@ -6,10 +6,13 @@ const CustomTooltip = (props: TooltipTeamInterface) => {
         let details = props.payload[0].payload.actions.rank;
 
         details.sort(function(a, b){
-            return (b.complexity_cyclomatic + b.methods * 0.8 + b.lines * 0.2)/2 - (a.complexity_cyclomatic + a.methods * 0.8 + a.lines * 0.2)/2;
+            let _a = Number((((a.additions + a.deletions) * 0.5)
+            + (a.complexity_cyclomatic * 4.5))/5);
+            let _b = Number((((b.additions + b.deletions) * 0.5)
+            + (b.complexity_cyclomatic * 4.5))/5)
+            return _b - _a;
         });
 
-        console.log(props);
 
         return (
             <div className="custom-tooltip-group">
@@ -17,11 +20,10 @@ const CustomTooltip = (props: TooltipTeamInterface) => {
                     <div>
                         <h3>{props.payload[0].payload.name}</h3>
                         <h4>{props.payload[0].payload.repos}</h4>
-                        <h4>Equilibrio: {props.payload[0].value}{props.payload[0].unit}</h4>
-                        <h4>Pontuação: {(props.payload[1].value).toFixed(2)}{props.payload[1].unit}</h4>
-                        <h4>Complexidade: {props.payload[1].payload.cc}{props.payload[1].unit}</h4>
-                        <h4>Métodos: {props.payload[1].payload.mt}{props.payload[1].unit}</h4>
-                        <h4>Linhas: {props.payload[1].payload.li}{props.payload[1].unit}</h4>
+                        <h4>Pontuação: {(props.payload[0].value).toFixed(2)}{props.payload[0].unit}</h4>
+                        <h4>Complexidade: {props.payload[0].payload.cc}{props.payload[0].unit}</h4>
+                        <h4>Métodos: {props.payload[0].payload.mt}{props.payload[0].unit}</h4>
+                        <h4>Alterações: {(props.payload[0].payload.changes)}{props.payload[0].unit}</h4>
                     </div>
                 </div>
                 {details.map(function(item, index){
@@ -30,10 +32,13 @@ const CustomTooltip = (props: TooltipTeamInterface) => {
                         let pointsPorcent = "0";
 
                         if(item.complexity_cyclomatic !== 0 || item.methods !== 0 || item.lines !== 0){
-                            points = Number((item.complexity_cyclomatic + item.methods * 0.8 + item.lines * 0.2/2)).toFixed(2);
+                            let _points = Number((((item.additions + item.deletions) * 0.5)
+                            + (item.complexity_cyclomatic * 4.5))/5);
 
-                            pointsPorcent = (Number(((item.complexity_cyclomatic + item.methods * 0.8 + item.lines * 0.2)/
-                            2)/props.payload[1].value) * 100).toFixed(2);
+                            points = _points.toFixed(2);
+
+                            console.log(((item.additions + item.deletions) * 0.5), (item.complexity_cyclomatic * 4.5), _points, props.payload[0].value)
+                            pointsPorcent = ((_points/props.payload[0].value) * 100).toFixed(2);
                         }
 
                         return(<div className="custom-tooltip custom-tooltip-team" key={index}>
@@ -42,7 +47,8 @@ const CustomTooltip = (props: TooltipTeamInterface) => {
                                 {
                                     item.name.includes("[bot]")? <h4>[Contagem pulada]</h4>:(<>
                                     <h4>Fez: {points} ({Number(pointsPorcent) > 100? 100:Number(pointsPorcent) < 0? 0:pointsPorcent}%)</h4>
-                                    <h4>[cc: {item.complexity_cyclomatic} | mt: {item.methods} | li: {item.lines}]</h4>
+                                    <h4>[alt: {item.additions + item.deletions} | cc: {item.complexity_cyclomatic} | mt: {item.methods} ]
+                                    </h4>
                                     </>)
                                 }
                             </div>

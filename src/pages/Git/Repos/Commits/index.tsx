@@ -262,9 +262,6 @@ const Commits = () => {
                 <AreaChart width={1200} height={200} className="areacharts-first" data={changesTimeline} syncId="timeline">
                 <CartesianGrid strokeDasharray="3 3"/>
                 <XAxis dataKey="dateReducer"/>
-                <Brush dataKey="dateReducer"
-                    height={50} stroke="rgba(197, 164, 91, 0.6)" travellerWidth={10}
-                />
                 <YAxis dataKey=""/>
                 <Tooltip content={Tooltip1}/>
                 <Area isAnimationActive={activeAnimation} animationDuration={6000} type='monotone' dataKey='author' name="Autor" stroke='rgba(197, 164, 91)' activeDot={false}></Area>

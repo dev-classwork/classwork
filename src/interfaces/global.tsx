@@ -160,9 +160,14 @@ export interface TeamsAnalyticsDataItem {
     cc: number;
     mt: number;
     li: number;
+    additions: number;
+    deletions: number;
+    changes?: number;
     commitInWeek?: boolean;
     details?: {
         author: string;
+        additions: number;
+        deletions: number;
         cc: number;
         mt: number;
         li: number;
@@ -241,6 +246,7 @@ export interface TooltipTeamInterface {
             id: number;
             name: string;
             repos: string;
+            changes: number;
             cc: number;
             mt: number;
             li: number;

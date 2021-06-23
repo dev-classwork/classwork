@@ -112,7 +112,7 @@ const Commits = () => {
                             let _path = "";
 
                             for(let i in _name){
-                                if(Number(i) < _name.length - 2){
+                                if(Number(i) < _name.length - 1){
                                     _path += _name[i] + "/"
                                 }
                             }
