@@ -1110,6 +1110,7 @@ input[type=date]:hover::-webkit-calendar-picker-indicator {
     display: flex;
     justify-content: center;
     margin-top: 20px;
+    position: relative;
     width: 100%;
 }
 .load-teams-screen {
@@ -1323,12 +1324,16 @@ input[type=date]:hover::-webkit-calendar-picker-indicator {
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
-    color: steelblue;
+    color: currentColor;
 }
 .custom-tooltip-team div {
     justify-content: flex-start;
     padding-left: 0px !important;
 }
+
+.custom-tooltip-team div h4:first-of-type {
+    color: currentColor !important;
+};
 
 /* Confirm Box */
 .confirm-box {
@@ -1644,6 +1649,93 @@ input[type=date]:hover::-webkit-calendar-picker-indicator {
         color: currentColor;
     }
 }
+
+
+/* Bar Chart Modal */
+.bar-chart-modal-button-notf {
+    position: absolute;
+    height: 26px;
+    bottom: -10px;
+    margin-left: 750px; 
+    z-index: 20;
+}
+
+.bar-chart-modal-button {
+    position: absolute;
+    width: 35px;
+    height: 35px;
+    bottom: -10px;
+    margin-left: 1000px;
+    background-color: transparent;
+    border: solid currentColor 2px;
+    padding-top: 4px;
+    border-radius: 60px;
+    z-index: 21;
+}
+
+.bar-chart-modal-button:hover {
+    background-color: currentColor;
+    border: solid white 2px;
+}
+
+.bar-chart-modal-button svg {
+    color: currentColor;
+}
+
+.bar-chart-modal-button:hover svg {
+    color: white;
+}
+
+.bar-chart-modal {
+    position: absolute;
+    margin: 10px;
+    padding: 20px;
+    display: flex;
+    font-size: 0.6rem;
+    flex-direction: column;
+    top: 30px;
+    margin-left: 60px;
+    background-color: white;
+    border-radius: 8px;
+    width: 950px;
+    max-height: 335px;
+    z-index: 20;
+    border: solid currentColor 3px;
+    flex-wrap: wrap;
+}
+
+.bar-chart-modal div {
+    margin-bottom: 5px;
+}
+
+.bar-chart-modal div h1 {
+    margin-bottom: 4px;
+}
+
+.bar-chart-modal div p.calc {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    color: black;
+    white-space: pre-wrap;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 @media screen and (max-width: 767px) and (orientation: portrait){
     /* Global */

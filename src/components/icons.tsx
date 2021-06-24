@@ -19,7 +19,8 @@ import {
     FaLifeRing,
     FaDiscord,
     FaGithubAlt,
-    FaTools
+    FaTools,
+    FaQuestion
 } from 'react-icons/fa';
 
 const Icons = (props: IconsComponent) => {
@@ -39,6 +40,7 @@ const Icons = (props: IconsComponent) => {
         case('plus'): return(<FaPlus size={props.size} color={props.color}/>);
         case('users'): return(<FaUsers size={props.size} color={props.color}/>);
         case('life-ring'): return(<FaLifeRing size={props.size} color={props.color}/>);
+        case('question'): return(<FaQuestion size={props.size} color={props.color}/>);
         case('discord'): return(<FaDiscord size={props.size} color={props.color}/>);
         case('tools'): return(<FaTools size={props.size} color={props.color}/>);
         case('user-lock'): return(<FaUserLock size={props.size} color={props.color}/>);

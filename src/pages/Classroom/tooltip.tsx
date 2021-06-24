@@ -21,9 +21,9 @@ const CustomTooltip = (props: TooltipTeamInterface) => {
                         <h3>{props.payload[0].payload.name}</h3>
                         <h4>{props.payload[0].payload.repos}</h4>
                         <h4>Pontuação: {(props.payload[0].value).toFixed(2)}{props.payload[0].unit}</h4>
-                        <h4>Complexidade: {props.payload[0].payload.cc}{props.payload[0].unit}</h4>
-                        <h4>Métodos: {props.payload[0].payload.mt}{props.payload[0].unit}</h4>
                         <h4>Alterações: {(props.payload[0].payload.changes)}{props.payload[0].unit}</h4>
+                        <h4>Métodos: {props.payload[0].payload.mt}{props.payload[0].unit}</h4>
+                        <h4>Complexidade: {props.payload[0].payload.cc}{props.payload[0].unit}</h4>
                     </div>
                 </div>
                 {details.map(function(item, index){
@@ -47,7 +47,7 @@ const CustomTooltip = (props: TooltipTeamInterface) => {
                                 {
                                     item.name.includes("[bot]")? <h4>[Contagem pulada]</h4>:(<>
                                     <h4>Fez: {points} ({Number(pointsPorcent) > 100? 100:Number(pointsPorcent) < 0? 0:pointsPorcent}%)</h4>
-                                    <h4>[alt: {item.additions + item.deletions} | cc: {item.complexity_cyclomatic} | mt: {item.methods} ]
+                                    <h4>[alt: {item.additions + item.deletions} | mt: {item.methods} | cc: {item.complexity_cyclomatic}]
                                     </h4>
                                     </>)
                                 }
