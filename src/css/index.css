@@ -1333,7 +1333,7 @@ input[type=date]:hover::-webkit-calendar-picker-indicator {
 
 .custom-tooltip-team div h4:first-of-type {
     color: currentColor !important;
-};
+}
 
 /* Confirm Box */
 .confirm-box {
